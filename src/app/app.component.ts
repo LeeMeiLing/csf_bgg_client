@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Subscription, map } from 'rxjs';
 import { Result } from './models';
 
 const BGG_URL = 'http://localhost:8080/api/bgg'
@@ -16,8 +16,9 @@ export class AppComponent implements OnInit{
 
   form!:FormGroup
   result$!:Subscription
-  results: any
   notFound = false
+  results!: Result[] // method 1
+  // results: Result[] = [] // method 2
 
   constructor(private fb:FormBuilder, private http:HttpClient){}
 
@@ -31,7 +32,8 @@ export class AppComponent implements OnInit{
     })
   }
 
-  // GET http://localhost:8080/api/bgg?name=NAME
+  // // ======== Method 1: ========
+  // // GET http://localhost:8080/api/bgg?name=NAME
   search(){
 
     this.notFound = false // reset notFound
@@ -40,7 +42,7 @@ export class AppComponent implements OnInit{
     const params = new HttpParams().set('name',this.form.value['name'])
 
     this.result$ = this.http.get(BGG_URL,{params}).subscribe({
-      next: r => {this.results = r},
+      next: r => {this.results = r as Result[]},
       error: err => {
         this.notFound = true
         console.error('ERROR: ', err)
@@ -51,5 +53,23 @@ export class AppComponent implements OnInit{
     })
 
   }
+
+  // // ======== Method 2: ========
+  // // GET http://localhost:8080/api/bgg?name=NAME
+  // search(){
+
+  //   this.notFound = false // reset notFound
+
+  //   // create query param
+  //   const params = new HttpParams().set('name',this.form.value['name'])
+
+  //   this.result$ = this.http.get(BGG_URL,{params})
+  //     .pipe(
+  //       map((r:any) => r as any[]), // extract as a array
+  //       map((ar:any[]) => ar.map( e => {e as Result ; this.results.push(e)} )) // use array.map() to extract every element in the array as Result
+  //       )
+  //     .subscribe({})
+
+  // }
   
 }
