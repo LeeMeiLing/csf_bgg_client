@@ -10,7 +10,7 @@
   <div *ngIf="notFound">
     <p>Game Not Found</p>
   </div>
-  <div *ngIf="results">
+  <!-- <div *ngIf="results">
     <h3>Game Info</h3>
     <table>
       <tr>GID: <span>{{results[0].gid}}</span></tr>
@@ -24,6 +24,28 @@
     <br>
     <h4>Top 5 Comments</h4>
     <table *ngFor="let r of results">
+      <br>
+      <tr>Comment ID: <span>{{r.cId}}</span></tr>
+      <tr>User: <span>{{r.user}}</span></tr>
+      <tr>Rating: <span>{{r.rating}}</span></tr>
+      <tr>Comment: <span>{{r.cText}}</span></tr>
+      <br>
+    </table>
+  </div> -->
+  <div *ngIf="mongoResult">
+    <h3>Game Info</h3>
+    <table>
+      <tr>GID: <span>{{mongoResult.gid}}</span></tr>
+      <tr>Name: <span>{{mongoResult.name}}</span></tr>
+      <tr>Year: <span>{{mongoResult.year}}</span></tr>
+      <tr>Ranking: <span>{{mongoResult.ranking}}</span></tr>
+      <tr>Number of Users Rated: <span>{{mongoResult.usersRated}}</span></tr>
+      <tr>Url: <span>{{mongoResult.url}}</span></tr>
+      <tr><img src="{{mongoResult.image}}" width="200px"></tr>
+    </table>
+    <br>
+    <h4>Top 5 Comments</h4>
+    <table *ngFor="let r of mongoResult.reviews">
       <br>
       <tr>Comment ID: <span>{{r.cId}}</span></tr>
       <tr>User: <span>{{r.user}}</span></tr>
